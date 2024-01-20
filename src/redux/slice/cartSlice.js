@@ -12,11 +12,7 @@ const cartSlice = createSlice({
   },
   reducers: {
     addToCart: (state, action) => {
-      // return [
-      //   ...state.data, { id: action.payload.id, title: action.payload.title }
-      // ]
       state.data.push(action.payload)
-      // return state.data
     }
 
   }
