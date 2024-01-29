@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { minusQuantity, plusQuantity } from '../redux/slice/cartSlice';
 
 function Header() {
 
   const carts = useSelector((state) => state.cart.data)
+  const dispatch = useDispatch()
 
   const [show, setShow] = useState(false)
 
@@ -49,16 +51,43 @@ function Header() {
           </div>
         </nav>
         {/* cart modal */}
-        <div className="relative hidden">
-          <div className="absolute right-5 -top-1 w-[23rem] h-96 bg-white border shadow-sm rounded-md">
-            <ul>
-              {carts.map((cart) => {
-                return (
-                  <li key={cart.id} className='bg-gray-200'>
-                    <p>{cart.title}</p>
-                  </li>
-                )
-              })}
+        <div className={`relative`}>
+          <div className="absolute right-5 -top-1 w-[26rem] h-96 bg-white border shadow-sm rounded-md">
+            <ul className='p-2'>
+              {carts.length !== 0 ? (
+                carts.map((cart, index) => {
+                  return (
+                    <li key={index} className='mb-2 p-2 border rounded-md'>
+                      <div className='flex justify-evenly items-center'>
+                        <div className='basis-1/5'>
+                          <img src={cart.image} alt={cart.title} className='h-20' />
+                        </div>
+                        <div className='basis-2/5'>
+                          <p className='mb-1 line-clamp-1'>{cart.title}</p>
+                          <div className='flex items-center gap-3 w-fit border'>
+                            <button onClick={() => dispatch(minusQuantity({ id: cart.id }))} className='py-1 px-1 hover:bg-gray-200'>
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M5 12h14" />
+                              </svg>
+                            </button>
+                            <p className=''>{cart.qty}</p>
+                            <button onClick={() => dispatch(plusQuantity({ id: cart.id }))} className='py-1 px-1 hover:bg-gray-200'>
+                              {/* <button className='py-1 px-1 hover:bg-gray-200'> */}
+                              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                              </svg>
+                            </button>
+                            {/* <p>{cart.qty}</p> */}
+                          </div>
+                        </div>
+                        <div className='basis-1/5'>
+                          <p className='font-bold text-lg'>${cart.qty * cart.price}</p>
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })
+              ) : (<>kososng</>)}
             </ul>
           </div>
         </div>
